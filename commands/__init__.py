@@ -3,6 +3,10 @@ from telegram.ext.dispatcher import run_async
 from telegram import InlineKeyboardMarkup ,InlineKeyboardButton
 from addons.utils import logger
 import time
+import requests
+import bs4
+import html5lib
+import re
 
 class Commands:
     
@@ -41,16 +45,30 @@ class Commands:
            parse_mode = "markdown",
            quote = True
         )
-        
+
     @run_async
     def live_matches(self, update, context):
+        wb = "https://www.cricbuzz.com"
+        a1 = requests.get(wb)
+        a2 = bs4.BeautifulSoup(a1.content.decode('utf-8'), "html5lib")
+        a3 = a2.find_all("script")[1].prettify()
         msg = update.callback_query.message.edit_text(
-          text = cric.live_matches(),
+          text=a3,
           parse_mode="markdown",
           reply_markup = InlineKeyboardMarkup([
              [ InlineKeyboardButton(text=f"<<< Go back to home",callback_data=f"back_to_home")]
           ])
-        )
+        ) 
+        
+    #@run_async
+    #def live_matches(self, update, context):
+    #    msg = update.callback_query.message.edit_text(
+    #      text = cric.live_matches(),
+    #      parse_mode="markdown",
+    #      reply_markup = InlineKeyboardMarkup([
+    #         [ InlineKeyboardButton(text=f"<<< Go back to home",callback_data=f"back_to_home")]
+    #      ])
+    #    )
         
     @run_async
     def list_matches(self, update, context):
