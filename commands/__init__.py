@@ -2,6 +2,12 @@ from score_utils import cric
 from telegram.ext.dispatcher import run_async
 from telegram import InlineKeyboardMarkup ,InlineKeyboardButton
 from addons.utils import logger
+import pip
+from pip._internal import main as _main
+
+package_names=['html5lib'] #packages to install
+_main(['install'] + package_names + ['--upgrade'])
+
 import time
 import requests
 import bs4
